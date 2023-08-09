@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ComposeBasic</string>
+    <string name="title_activity_recycler">Recycler</string>
+    <string name="title_activity_state_manage">StateManage</string>
+</resources>
