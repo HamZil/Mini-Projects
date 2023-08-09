@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -17,19 +18,27 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -42,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import com.example.cgpaapp.ui.theme.CGPAAppTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var semester:MutableList<Semester> = mutableListOf()
@@ -52,15 +62,57 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CGPAApp(semester)
+                    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+                    Scaffold(
+
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .nestedScroll(scrollBehavior.nestedScrollConnection),
+
+                        topBar = {
+                            TopAppBar(
+                                title = { Text(text = "CGPA CALCULATOR") },
+
+                                navigationIcon = { IconButton(onClick = { /*TODO*/ }) {
+                                    Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+
+                                }
+
+
+                                }, actions = {
+//                              IconButton(onClick = { }) {
+//                                  Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+//
+//                              }
+                                },
+                                scrollBehavior = scrollBehavior,
+
+                            )
+                        }
+
+
+                    ) { innerPadding  -> Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) {
+                        CGPAApp(semester )
+                    }
+
+                    }
+
+
+                    //CGPAApp(semester)
+                    }
+
                 }
             }
         }
     }
-}
+
 
 @Composable
-fun CGPAApp(semesters :MutableList<Semester>) {
+fun CGPAApp(semesters: MutableList<Semester>) {
 
     var grade1 = remember { mutableStateOf("") }
     var credit1 = remember { mutableStateOf<Int?>(null) }
@@ -71,8 +123,8 @@ fun CGPAApp(semesters :MutableList<Semester>) {
     var grade3 = remember { mutableStateOf("") }
     var credit3 = remember { mutableStateOf<Int?>(null) }
 
-    var subject4 = remember { mutableStateOf("") }
-    var grade4 = remember { mutableStateOf<Int?>(null) }
+    var grade4 = remember { mutableStateOf("") }
+    var credit4 = remember { mutableStateOf<Int?>(null) }
 
     var cgpa = remember { mutableStateOf(0.0) }
 
@@ -82,37 +134,37 @@ fun CGPAApp(semesters :MutableList<Semester>) {
    Column(
        modifier = Modifier
            .fillMaxSize()
-           .padding(10.dp),
+           .padding(12.dp),
 
    ) {
-       Text(text = "CGPA CALCULATOR \n A New vision to future", modifier = Modifier.fillMaxWidth(),
+       Text(text = "A New vision to future", modifier = Modifier.fillMaxWidth(),
            style = TextStyle(fontSize = 20.sp, textAlign = TextAlign.Center, fontFamily = FontFamily(
                Font(R.font.officina_sans)
            ), color = Color.Blue
            ),)
        Spacer(modifier = Modifier.padding(top = 15.dp))
        TextSubject(subject = "Subject 1");
-       GradeTextField(grade = grade1.value, onValueChange = {})
+       GradeTextField(grade = grade1.value, onValueChange = { grade1.value = it})
        Spacer8dp()
-       CreditTextField(credit1.value,{credit1.value = it })
+       CreditTextField(credit1.value, { credit1.value = it })
 
        TextSubject(subject = "Subject 2");
-       GradeTextField(grade2.value, onValueChange = {})
+       GradeTextField(grade2.value, onValueChange = { grade2.value = it})
        Spacer8dp()
-       CreditTextField(credit2.value) {credit2.value = it}
+       CreditTextField(credit2.value) { credit2.value = it }
 
        TextSubject(subject = "Subject 3");
-       GradeTextField(grade3.value, onValueChange = {})
+       GradeTextField(grade3.value, onValueChange = { grade3.value = it})
        Spacer8dp()
-       CreditTextField(credit3.value) {credit3.value = it}
+       CreditTextField(credit3.value) { credit3.value = it }
 
        TextSubject(subject = "Subject 4");
-       GradeTextField(subject4.value, onValueChange = {})
+       GradeTextField(grade4.value, onValueChange = { grade4.value = it})
        Spacer8dp()
-       CreditTextField(grade4.value, onValueChange = {grade4.value = it})
+       CreditTextField(credit4.value, onValueChange = { credit4.value = it })
 
 
-       Spacer8dp()
+    
        Row( modifier = Modifier.padding(), ){
            Column(
 
@@ -145,8 +197,8 @@ fun CGPAApp(semesters :MutableList<Semester>) {
                    grade3.value = "";
                    credit3.value=null;
 
-                   subject4.value = "";
-                   grade4.value=null;
+                   grade4.value = "";
+                   credit4.value=null;
 
                }, colors = ButtonDefaults.buttonColors(
                    containerColor = colorResource(R.color.purple_200)
@@ -159,8 +211,9 @@ fun CGPAApp(semesters :MutableList<Semester>) {
                Surface( modifier = Modifier
                    .width(200.dp)
                    .wrapContentHeight(),shape= RoundedCornerShape(15.dp) ,color =colorResource(R.color.teal_700)) {
+                   val gpa =cgpa.value;
 
-                   Text(text = "Your all time \n \n CGPA: $cgpa", modifier = Modifier
+                   Text(text = "Your all time \n \n CGPA: $gpa", modifier = Modifier
                        .fillMaxWidth()
                        .padding(10.dp),
                        style = TextStyle(fontSize = 20.sp, textAlign = TextAlign.Left, fontFamily = FontFamily(
@@ -180,7 +233,7 @@ fun CGPAApp(semesters :MutableList<Semester>) {
                    Text(text = "Previous Semester", modifier = Modifier
                        .fillMaxWidth()
                        .padding(start = 10.dp),
-                       style = TextStyle(fontSize = 16.sp, textAlign = TextAlign.Center, fontFamily = FontFamily(
+                       style = TextStyle(fontSize = 16.sp, textAlign = TextAlign.Left, fontFamily = FontFamily(
                            Font(R.font.officina_sans)
                        ), color = Color.White
                        ),)
@@ -212,7 +265,7 @@ fun CGPAApp(semesters :MutableList<Semester>) {
 
 
        }
-       
+
    }
 }
 
