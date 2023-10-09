@@ -13,24 +13,26 @@
         android:theme="@style/Theme.ComposeBasic"
         tools:targetApi="31">
         <activity
+            android:name=".ActivityDB"
+            android:exported="false"
+            android:label="@string/title_activity_db"
+            android:theme="@style/Theme.ComposeBasic" />
+        <activity
             android:name=".StateManage"
             android:exported="false"
             android:label="@string/title_activity_state_manage"
-            android:theme="@style/Theme.ComposeBasic" >
-
+            android:theme="@style/Theme.ComposeBasic">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".Recycler"
             android:exported="false"
             android:label="@string/title_activity_recycler"
             android:theme="@style/Theme.ComposeBasic" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true"

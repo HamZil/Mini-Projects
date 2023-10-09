@@ -164,7 +164,6 @@ fun CGPAApp(semesters: MutableList<Semester>) {
        CreditTextField(credit4.value, onValueChange = { credit4.value = it })
 
 
-    
        Row( modifier = Modifier.padding(), ){
            Column(
 
